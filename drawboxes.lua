@@ -4,7 +4,7 @@ Box.__index = Box
 setmetatable(Box, {
   __call = function(cls, ...)
     local self = setmetatable({}, cls)
-    self:new()
+    self:new(...)
     return self
   end
 })
@@ -50,3 +50,9 @@ function Box:setBottom(y)  self:_setY(y, 1)  end
 function Box:setTopLeft(x, y)     self:_set(x, y, 0, 0)   end
 function Box:setCenter(x, y)      self:_set(x, y, .5, .5) end
 function Box:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
+
+function Box:draw()
+  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+end
+
+return {Box = Box}
