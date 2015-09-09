@@ -1,4 +1,12 @@
---basic box class
+local function removeByValue(t, value)
+  for i = #t, 1, -1 do
+    if t[i] == value then
+      table.remove(t, i)
+      break
+    end
+  end
+end
+
 local Box = {}
 Box.__index = Box
 
@@ -60,13 +68,12 @@ function Box:setCenter(x, y)      self:_set(x, y, .5, .5) end
 function Box:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
 ----END OF HORRIBLE THINGS----
 
---just for debugging, take me out later!
 function Box:draw(x, y)
   x, y = x or 0, y or 0
+  --just for debugging, take me out later!
   love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
---container class
 local Container = {}
 Container.__index = Container
 
@@ -89,6 +96,10 @@ function Container:add(...)
   for i = 1, #children do
     table.insert(self.children, children[i])
   end
+end
+
+function Container:remove(child)
+  removeByValue(self.children, child)
 end
 
 function Container:wrap(...)
@@ -120,6 +131,7 @@ function Container:draw(x, y)
   for i = 1, #self.children do
     self.children[i]:draw(self.x, self.y)
   end
+  --just for debugging, take me out later
   love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
