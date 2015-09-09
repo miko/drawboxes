@@ -6,9 +6,11 @@ function love.load()
 
   box2:setBottomRight(box1:getBottomRight())
   box1:setLeft(box2:getRight())
+
+  container = drawboxes.Container(100, 0, 800, 600)
+  container:add(box1, box2)
 end
 
 function love.draw()
-  box1:draw()
-  box2:draw()
+  container:draw()
 end

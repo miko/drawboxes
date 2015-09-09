@@ -1,3 +1,4 @@
+--basic box class
 local Box = {}
 Box.__index = Box
 
@@ -16,19 +17,23 @@ function Box:new(x, y, w, h)
   self.h = h
 end
 
+--internally used getters/setters, can be customized if need be
 function Box:_getX(amount) return self.x + self.w * amount end
 function Box:_getY(amount) return self.y + self.h * amount end
+function Box:_setX(x, amount) self.x = x - self.w * amount end
+function Box:_setY(y, amount) self.y = y - self.h * amount end
+
+--internally used shortcut functions
 function Box:_get(amountX, amountY)
   return self:_getX(amountX), self:_getY(amountY)
 end
-
-function Box:_setX(x, amount) self.x = x - self.w * amount end
-function Box:_setY(y, amount) self.y = y - self.h * amount end
 function Box:_set(x, y, amountX, amountY)
   self:_setX(x, amountX)
   self:_setY(y, amountY)
 end
 
+----I'M SORRY YOU HAVE TO LOOK AT ALL OF THIS----
+--public getters (x and y separately)
 function Box:getLeft()    return self:_getX(0)  end
 function Box:getCenterX() return self:_getX(.5) end
 function Box:getRight()   return self:_getX(1)  end
@@ -36,10 +41,12 @@ function Box:getTop()     return self:_getY(0)  end
 function Box:getCenterY() return self:_getY(.5) end
 function Box:getBottom()  return self:_getY(1)  end
 
+--public getters (both x and y)
 function Box:getTopLeft()     return self:_get(0, 0)   end
 function Box:getCenter()      return self:_get(.5, .5) end
 function Box:getBottomRight() return self:_get(1, 1)   end
 
+--public setters (x and y separately)
 function Box:setLeft(x)    self:_setX(x, 0)  end
 function Box:setCenterX(x) self:_setX(x, .5) end
 function Box:setRight(x)   self:_setX(x, 1)  end
@@ -47,12 +54,48 @@ function Box:setTop(y)     self:_setY(y, 0)  end
 function Box:setCenterY(y) self:_setY(y, .5) end
 function Box:setBottom(y)  self:_setY(y, 1)  end
 
+--public setters (both x and y)
 function Box:setTopLeft(x, y)     self:_set(x, y, 0, 0)   end
 function Box:setCenter(x, y)      self:_set(x, y, .5, .5) end
 function Box:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
+----END OF HORRIBLE THINGS----
 
-function Box:draw()
-  love.graphics.rectangle('line', self.x, self.y, self.w, self.h)
+--just for debugging, take me out later!
+function Box:draw(x, y)
+  x, y = x or 0, y or 0
+  love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
-return {Box = Box}
+--container class
+local Container = {}
+Container.__index = Container
+
+setmetatable(Container, {
+  __index = Box,
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+function Container:new(x, y, w, h)
+  Box.new(self, x, y, w, h)
+  self.children = {}
+end
+
+function Container:add(...)
+  local children = {...}
+  for i = 1, #children do
+    table.insert(self.children, children[i])
+  end
+end
+
+function Container:draw(x, y)
+  x, y = x or 0, y or 0
+  for i = 1, #self.children do
+    self.children[i]:draw(self.x, self.y)
+  end
+end
+
+return {Box = Box, Container = Container}
