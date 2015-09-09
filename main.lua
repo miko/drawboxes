@@ -8,7 +8,7 @@ function love.load()
   box1:setLeft(box2:getRight())
 
   container = drawboxes.Container(100, 0, 800, 600)
-  container:add(box1, box2)
+  container:wrap(box1, box2, drawboxes.Box(400, 500, 50, 50))
 end
 
 function love.draw()

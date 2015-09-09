@@ -91,11 +91,36 @@ function Container:add(...)
   end
 end
 
+function Container:wrap(...)
+  --get the box around all the objects
+  local children = {...}
+  local x1, y1 = children[1]:getTopLeft()
+  local x2, y2 = children[1]:getBottomRight()
+  for i = 2, #children do
+    local child = children[i]
+    if child:getLeft() < x1 then x1 = child:getLeft() end
+    if child:getTop() < y1 then y1 = child:getTop() end
+    if child:getRight() > x2 then x2 = child:getRight() end
+    if child:getBottom() > y2 then y2 = child:getBottom() end
+  end
+
+  self.x, self.y, self.w, self.h = x1, y1, x2 - x1, y2 - y1
+
+  --add the objects
+  for i = 1, #children do
+    local child = children[i]
+    child:setLeft(child:getLeft() - self:getLeft())
+    child:setTop(child:getTop() - self:getTop())
+    self:add(child)
+  end
+end
+
 function Container:draw(x, y)
   x, y = x or 0, y or 0
   for i = 1, #self.children do
     self.children[i]:draw(self.x, self.y)
   end
+  love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
 return {Box = Box, Container = Container}
