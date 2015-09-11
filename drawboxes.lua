@@ -191,10 +191,52 @@ function Circle:draw(x, y)
   love.graphics.circle(self.mode, self.x, self.y, self.r, self.segments)
 end
 
+local Image = {}
+Image.__index = Image
+
+setmetatable(Image, {
+  __index = Box,
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+function Image:new(image, x, y, r, sx, sy, ox, oy, kx, ky, color)
+  self.image = image
+  self.x     = x
+  self.y     = y
+  self.r     = r or 0
+  self.sx    = sx or 1
+  self.sy    = sy or 1
+  self.ox    = ox or 0
+  self.oy    = oy or 0
+  self.kx    = kx or 0
+  self.ky    = ky or 0
+  self.color = color or {255, 255, 255, 255}
+end
+
+function Image:_getX(amount)
+  local left = self.x - self.ox * self.sx
+  return left + self.image:getWidth() * self.sx * amount
+end
+
+function Image:_getY(amount)
+  local top = self.y - self.oy * self.sy
+  return top + self.image:getHeight() * self.sy * amount
+end
+
+function Image:draw(x, y)
+  x, y = x or 0, y or 0
+  love.graphics.setColor(self.color)
+  love.graphics.draw(self.image, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
+end
 
 return {
   Box       = Box,
   Container = Container,
   Rectangle = Rectangle,
-  Circle    = Circle
+  Circle    = Circle,
+  Image     = Image
 }

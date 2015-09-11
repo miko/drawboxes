@@ -1,12 +1,21 @@
 function love.load()
   drawboxes = require 'drawboxes'
 
-  circle = drawboxes.Circle(100, 200, 100, 100, 'fill', {255, 0, 0, 255})
-  rect2 = drawboxes.Rectangle(10, 10, 30, 30, 'line')
-  rect2:setCenter(circle:getRight(), circle:getCenterY())
+  image = drawboxes.Image(
+    love.graphics.newImage('testImage.png'), 400, 300,
+    0, 2, 2, 25, 25
+  )
+  circle = drawboxes.Circle(400, 300, 10)
+  circle:setCenter(image:getBottomRight())
+end
+
+function love.update(dt)
+  image.sx = image.sx + .1 * dt
+  image.sy = image.sy + .2 * dt
+  circle:setCenter(image:getBottomRight())
 end
 
 function love.draw()
+  image:draw()
   circle:draw()
-  rect2:draw()
 end
