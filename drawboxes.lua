@@ -159,4 +159,41 @@ function Rectangle:draw(x, y)
   love.graphics.rectangle(self.mode, self.x + x, self.y + y, self.w, self.h)
 end
 
-return {Box = Box, Container = Container, Rectangle = Rectangle}
+local Circle = {}
+Circle.__index = Circle
+
+setmetatable(Circle, {
+  __index = Box,
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+function Circle:new(x, y, r, segments, mode, color)
+  self.x        = x
+  self.y        = y
+  self.r        = r
+  self.segments = segments or 100
+  self.mode     = mode or 'fill'
+  self.color    = color or {255, 255, 255, 255}
+end
+
+function Circle:_getX(amount) return self.x - self.r + self.r * 2 * amount end
+function Circle:_getY(amount) return self.y - self.r + self.r * 2 * amount end
+function Circle:_setX(x, amount) self.x = x + self.r - 2 * self.r * amount end
+function Circle:_setY(y, amount) self.y = x + self.r - 2 * self.r * amount end
+
+function Circle:draw(x, y)
+  x, y = x or 0, y or 0
+  love.graphics.setColor(self.color)
+  love.graphics.circle(self.mode, self.x, self.y, self.r, self.segments)
+end
+
+return {
+  Box       = Box,
+  Container = Container,
+  Rectangle = Rectangle,
+  Circle    = Circle
+}
