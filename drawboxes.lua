@@ -25,13 +25,15 @@ function Box:new(x, y, w, h)
   self.h = h
 end
 
---internally used getters/setters, can be customized if need be
+--internally used get functions, you might want to customize these
 function Box:_getX(amount) return self.x + self.w * amount end
 function Box:_getY(amount) return self.y + self.h * amount end
-function Box:_setX(x, amount) self.x = x - self.w * amount end
-function Box:_setY(y, amount) self.y = y - self.h * amount end
 
---internally used shortcut functions
+--internally used set functions, these should work for any objects with x and y properties
+function Box:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
+function Box:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
+
+--internally used shortcut functions, you shouldn't need to change these
 function Box:_get(amountX, amountY)
   return self:_getX(amountX), self:_getY(amountY)
 end
@@ -182,14 +184,13 @@ end
 
 function Circle:_getX(amount) return self.x - self.r + self.r * 2 * amount end
 function Circle:_getY(amount) return self.y - self.r + self.r * 2 * amount end
-function Circle:_setX(x, amount) self.x = x + self.r - 2 * self.r * amount end
-function Circle:_setY(y, amount) self.y = x + self.r - 2 * self.r * amount end
 
 function Circle:draw(x, y)
   x, y = x or 0, y or 0
   love.graphics.setColor(self.color)
   love.graphics.circle(self.mode, self.x, self.y, self.r, self.segments)
 end
+
 
 return {
   Box       = Box,
