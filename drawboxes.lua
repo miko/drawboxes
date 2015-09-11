@@ -135,4 +135,28 @@ function Container:draw(x, y)
   love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
-return {Box = Box, Container = Container}
+local Rectangle = {}
+Rectangle.__index = Rectangle
+
+setmetatable(Rectangle, {
+  __index = Box,
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+function Rectangle:new(x, y, w, h, mode, color)
+  Box.new(self, x, y, w, h)
+  self.mode  = mode or 'fill'
+  self.color = color or {255, 255, 255, 255}
+end
+
+function Rectangle:draw(x, y)
+  x, y = x or 0, y or 0
+  love.graphics.setColor(self.color)
+  love.graphics.rectangle(self.mode, self.x + x, self.y + y, self.w, self.h)
+end
+
+return {Box = Box, Container = Container, Rectangle = Rectangle}

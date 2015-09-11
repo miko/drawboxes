@@ -1,17 +1,12 @@
 function love.load()
   drawboxes = require 'drawboxes'
 
-  box1 = drawboxes.Box(300, 300, 50, 50)
-  box2 = drawboxes.Box(100, 100, 300, 200)
-
-  box2:setBottomRight(box1:getBottomRight())
-  box1:setLeft(box2:getRight())
-
-  container = drawboxes.Container(100, 0, 800, 600)
-  container:wrap(box1, box2, drawboxes.Box(400, 500, 50, 50))
-  container:remove(box1)
+  rect1 = drawboxes.Rectangle(10, 10, 500, 500, 'fill', {255, 0, 0, 255})
+  rect2 = drawboxes.Rectangle(10, 10, 30, 30, 'line')
+  rect2:setCenter(rect1:getCenter())
 end
 
 function love.draw()
-  container:draw()
+  rect1:draw()
+  rect2:draw()
 end
