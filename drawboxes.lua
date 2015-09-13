@@ -18,19 +18,6 @@ setmetatable(Base, {
   end
 })
 
---internally used set functions, these should work for any objects with x and y properties
-function Base:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
-function Base:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
-
---internally used shortcut functions, you shouldn't need to change these
-function Base:_get(amountX, amountY)
-  return self:_getX(amountX), self:_getY(amountY)
-end
-function Base:_set(x, y, amountX, amountY)
-  self:_setX(x, amountX)
-  self:_setY(y, amountY)
-end
-
 ----I'M SORRY YOU HAVE TO LOOK AT ALL OF THIS----
 --public getters (x and y separately)
 function Base:getLeft()    return self:_getX(0)  end
@@ -41,9 +28,15 @@ function Base:getCenterY() return self:_getY(.5) end
 function Base:getBottom()  return self:_getY(1)  end
 
 --public getters (both x and y)
-function Base:getTopLeft()     return self:_get(0, 0)   end
-function Base:getCenter()      return self:_get(.5, .5) end
-function Base:getBottomRight() return self:_get(1, 1)   end
+function Base:getTopLeft()
+  return self:_getX(0), self:_getY(0)
+end
+function Base:getCenter()
+  return self:_getX(.5), self:_getY(.5)
+end
+function Base:getBottomRight()
+  return self:_getX(1), self:_getY(1)
+end
 
 --public setters (x and y separately)
 function Base:setLeft(x)    self:_setX(x, 0)  end
@@ -54,9 +47,18 @@ function Base:setCenterY(y) self:_setY(y, .5) end
 function Base:setBottom(y)  self:_setY(y, 1)  end
 
 --public setters (both x and y)
-function Base:setTopLeft(x, y)     self:_set(x, y, 0, 0)   end
-function Base:setCenter(x, y)      self:_set(x, y, .5, .5) end
-function Base:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
+function Base:setTopLeft(x, y)
+  self:_setX(x, 0)
+  self:_setY(y, 0)
+end
+function Base:setCenter(x, y)
+  self:_setX(x, .5)
+  self:_setY(y, .5)
+end
+function Base:setBottomRight(x, y)
+  self:_setX(x, 1)
+  self:_setY(y, 1)
+end
 ----END OF HORRIBLE THINGS----
 
 local Box = {}
@@ -81,6 +83,8 @@ end
 --internally used get functions, you might want to customize these
 function Box:_getX(amount) return self.x + self.w * amount end
 function Box:_getY(amount) return self.y + self.h * amount end
+function Box:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
+function Box:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
 
 function Box:draw(x, y)
   x, y = x or 0, y or 0
