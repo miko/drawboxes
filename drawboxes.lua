@@ -7,10 +7,63 @@ local function removeByValue(t, value)
   end
 end
 
+local Base = {}
+Base.__index = Base
+
+setmetatable(Base, {
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+--internally used set functions, these should work for any objects with x and y properties
+function Base:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
+function Base:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
+
+--internally used shortcut functions, you shouldn't need to change these
+function Base:_get(amountX, amountY)
+  return self:_getX(amountX), self:_getY(amountY)
+end
+function Base:_set(x, y, amountX, amountY)
+  self:_setX(x, amountX)
+  self:_setY(y, amountY)
+end
+
+----I'M SORRY YOU HAVE TO LOOK AT ALL OF THIS----
+--public getters (x and y separately)
+function Base:getLeft()    return self:_getX(0)  end
+function Base:getCenterX() return self:_getX(.5) end
+function Base:getRight()   return self:_getX(1)  end
+function Base:getTop()     return self:_getY(0)  end
+function Base:getCenterY() return self:_getY(.5) end
+function Base:getBottom()  return self:_getY(1)  end
+
+--public getters (both x and y)
+function Base:getTopLeft()     return self:_get(0, 0)   end
+function Base:getCenter()      return self:_get(.5, .5) end
+function Base:getBottomRight() return self:_get(1, 1)   end
+
+--public setters (x and y separately)
+function Base:setLeft(x)    self:_setX(x, 0)  end
+function Base:setCenterX(x) self:_setX(x, .5) end
+function Base:setRight(x)   self:_setX(x, 1)  end
+function Base:setTop(y)     self:_setY(y, 0)  end
+function Base:setCenterY(y) self:_setY(y, .5) end
+function Base:setBottom(y)  self:_setY(y, 1)  end
+
+--public setters (both x and y)
+function Base:setTopLeft(x, y)     self:_set(x, y, 0, 0)   end
+function Base:setCenter(x, y)      self:_set(x, y, .5, .5) end
+function Base:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
+----END OF HORRIBLE THINGS----
+
 local Box = {}
 Box.__index = Box
 
 setmetatable(Box, {
+  __index = Base,
   __call = function(cls, ...)
     local self = setmetatable({}, cls)
     self:new(...)
@@ -28,47 +81,6 @@ end
 --internally used get functions, you might want to customize these
 function Box:_getX(amount) return self.x + self.w * amount end
 function Box:_getY(amount) return self.y + self.h * amount end
-
---internally used set functions, these should work for any objects with x and y properties
-function Box:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
-function Box:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
-
---internally used shortcut functions, you shouldn't need to change these
-function Box:_get(amountX, amountY)
-  return self:_getX(amountX), self:_getY(amountY)
-end
-function Box:_set(x, y, amountX, amountY)
-  self:_setX(x, amountX)
-  self:_setY(y, amountY)
-end
-
-----I'M SORRY YOU HAVE TO LOOK AT ALL OF THIS----
---public getters (x and y separately)
-function Box:getLeft()    return self:_getX(0)  end
-function Box:getCenterX() return self:_getX(.5) end
-function Box:getRight()   return self:_getX(1)  end
-function Box:getTop()     return self:_getY(0)  end
-function Box:getCenterY() return self:_getY(.5) end
-function Box:getBottom()  return self:_getY(1)  end
-
---public getters (both x and y)
-function Box:getTopLeft()     return self:_get(0, 0)   end
-function Box:getCenter()      return self:_get(.5, .5) end
-function Box:getBottomRight() return self:_get(1, 1)   end
-
---public setters (x and y separately)
-function Box:setLeft(x)    self:_setX(x, 0)  end
-function Box:setCenterX(x) self:_setX(x, .5) end
-function Box:setRight(x)   self:_setX(x, 1)  end
-function Box:setTop(y)     self:_setY(y, 0)  end
-function Box:setCenterY(y) self:_setY(y, .5) end
-function Box:setBottom(y)  self:_setY(y, 1)  end
-
---public setters (both x and y)
-function Box:setTopLeft(x, y)     self:_set(x, y, 0, 0)   end
-function Box:setCenter(x, y)      self:_set(x, y, .5, .5) end
-function Box:setBottomRight(x, y) self:_set(x, y, 1, 1)   end
-----END OF HORRIBLE THINGS----
 
 function Box:draw(x, y)
   x, y = x or 0, y or 0
@@ -232,6 +244,8 @@ function Image:draw(x, y)
   love.graphics.setColor(self.color)
   love.graphics.draw(self.image, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
 end
+
+local drawboxes = {}
 
 return {
   Box       = Box,
