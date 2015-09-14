@@ -225,7 +225,7 @@ function Image:new(image, x, y, r, sx, sy, ox, oy, kx, ky, color)
   self.y     = y
   self.r     = r or 0
   self.sx    = sx or 1
-  self.sy    = sy or 1
+  self.sy    = sy or self.sx
   self.ox    = ox or 0
   self.oy    = oy or 0
   self.kx    = kx or 0
@@ -249,12 +249,55 @@ function Image:draw(x, y)
   love.graphics.draw(self.image, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
 end
 
-local drawboxes = {}
+local Text = {}
+Text.__index = Text
+
+setmetatable(Text, {
+  __index = Box,
+  __call = function(cls, ...)
+    local self = setmetatable({}, cls)
+    self:new(...)
+    return self
+  end
+})
+
+function Text:new(font, text, x, y, r, sx, sy, ox, oy, kx, ky, color)
+  self.font  = font
+  self.text  = text
+  self.x     = x
+  self.y     = y
+  self.r     = r or 0
+  self.sx    = sx or 1
+  self.sy    = sy or self.sx
+  self.ox    = ox or 0
+  self.oy    = oy or 0
+  self.kx    = kx or 0
+  self.ky    = ky or 0
+  self.color = color or {255, 255, 255, 255}
+end
+
+function Text:_getX(amount)
+  local left = self.x - self.ox * self.sx
+  return left + self.font:getWidth(self.text) * self.sx * amount
+end
+
+function Text:_getY(amount)
+  local top = self.y - self.oy * self.sy
+  return top + self.font:getHeight(self.text) * self.sy * amount
+end
+
+function Text:draw(x, y)
+  x, y = x or 0, y or 0
+  love.graphics.setColor(self.color)
+  love.graphics.setFont(self.font)
+  love.graphics.print(self.text, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
+end
 
 return {
   Box       = Box,
   Container = Container,
   Rectangle = Rectangle,
   Circle    = Circle,
-  Image     = Image
+  Image     = Image,
+  Text      = Text
 }
