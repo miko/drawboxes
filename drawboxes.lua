@@ -86,12 +86,6 @@ function Box:_getY(amount) return self.y + self.h * amount end
 function Box:_setX(x, amount) self.x = self.x + x - self:_getX(amount) end
 function Box:_setY(y, amount) self.y = self.y + y - self:_getY(amount) end
 
-function Box:draw(x, y)
-  x, y = x or 0, y or 0
-  --just for debugging, take me out later!
-  love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
-end
-
 local Container = {}
 Container.__index = Container
 
@@ -149,8 +143,6 @@ function Container:draw(x, y)
   for i = 1, #self.children do
     self.children[i]:draw(self.x, self.y)
   end
-  --just for debugging, take me out later
-  love.graphics.rectangle('line', self.x + x, self.y + y, self.w, self.h)
 end
 
 local Rectangle = {}
