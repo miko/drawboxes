@@ -141,7 +141,7 @@ end
 function Container:draw(x, y)
   x, y = x or 0, y or 0
   for i = 1, #self.children do
-    self.children[i]:draw(self.x, self.y)
+    self.children[i]:draw(self.x + x, self.y + y)
   end
 end
 
@@ -196,7 +196,7 @@ function Circle:_getY(amount) return self.y - self.r + self.r * 2 * amount end
 function Circle:draw(x, y)
   x, y = x or 0, y or 0
   love.graphics.setColor(self.color)
-  love.graphics.circle(self.mode, self.x, self.y, self.r, self.segments)
+  love.graphics.circle(self.mode, self.x + x, self.y + y, self.r, self.segments)
 end
 
 local Image = {}
@@ -238,7 +238,7 @@ end
 function Image:draw(x, y)
   x, y = x or 0, y or 0
   love.graphics.setColor(self.color)
-  love.graphics.draw(self.image, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
+  love.graphics.draw(self.image, self.x + x, self.y + y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
 end
 
 local Text = {}
@@ -282,7 +282,7 @@ function Text:draw(x, y)
   x, y = x or 0, y or 0
   love.graphics.setColor(self.color)
   love.graphics.setFont(self.font)
-  love.graphics.print(self.text, self.x, self.y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
+  love.graphics.print(self.text, self.x + x, self.y + y, self.r, self.sx, self.sy, self.ox, self.oy, self.kx, self.ky)
 end
 
 return {
