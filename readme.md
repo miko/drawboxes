@@ -86,6 +86,10 @@ Returns a new box.
 
 Containers are boxes that hold other boxes. I know, right?
 
+**Implements:** Box
+
+#### Functions
+
 `container = drawboxes.Container(x, y, w, h)`
 
 Returns a new container.
@@ -107,3 +111,143 @@ Automatically repositions and resizes the container to tightly surround all spec
 Draws all child objects.
 
 **Note:** The container's child objects are drawn relative to the position of the container.
+
+### Rectangle class
+
+Draws a rectangle.
+
+**Implements:** Box
+
+#### Properties
+- `x` is the x coordinate of the left edge of the rectangle.
+- `y` is the y coordinate of the top edge of the rectangle.
+- `w` is the width of the rectangle.
+- `h` is the height of the rectangle.
+- `mode` is the draw mode of the rectangle. Should be either "fill" or "line".
+- `color` is the color of the rectangle. Should be a table with four numbers from 1-255 (r, g, b, a).
+
+#### Functions
+
+`rectangle = drawboxes.Rectangle(x, y, w, h, mode, color)`
+
+Returns a new rectangle.
+- `x` is the x coordinate of the left edge of the rectangle.
+- `y` is the y coordinate of the top edge of the rectangle.
+- `w` is the width of the rectangle.
+- `h` is the height of the rectangle.
+- `mode` is the draw mode of the rectangle. (default: `"fill"`)
+- `color` is the color of the rectangle. (default: '{255, 255, 255, 255}')
+
+`rectangle:draw()`
+
+Draws the rectangle.
+
+### Circle class
+
+Draws a circle.
+
+**Implements:** Box
+
+#### Properties
+- `x` is the x coordinate of the center of the circle.
+- `y` is the y coordinate of the center of the circle.
+- `r` is the radius of the circle.
+- `segments` is the number of segments to draw the circle with.
+- `mode` is the draw mode of the circle (should be either "fill" or "line").
+- `color` is the color of the circle. Should be a table with four numbers from 1-255 (r, g, b, a).
+
+#### Functions
+
+`circle = drawboxes.Circle(x, y, r, segments, mode, color)`
+- `x` is the x coordinate of the center of the circle.
+- `y` is the y coordinate of the center of the circle.
+- `r` is the radius of the circle.
+- `segments` is the number of segments to draw the circle with. (default: `100`)
+- `mode` is the draw mode of the circle. (default: `"fill"`)
+- `color` is the color of the circle. (default: `{255, 255, 255, 255}`)
+
+`circle:draw()`
+
+Draws the circle.
+
+### Image class
+
+Draws an image.
+
+**Implements:** Box
+
+#### Properties
+- `image` is the image to draw.
+- `x` is the x coordinate of the image.
+- `y` is the y coordinate of the image.
+- `r` is the rotation of the image.
+- `sx` is the horizontal scale of the image.
+- `sy` is the vertical scale of the image.
+- `ox` is the horizontal offset of the image (in pixels).
+- `oy` is the vertical offset of the image (in pixels).
+- `kx` is the horizontal shearing factor of the image.
+- `ky` is the vertical shearing factor of the image.
+- `color` is the color of the image. Should be a table with four numbers from 1-255 (r, g, b, a).
+
+#### Functions
+
+`image = drawboxes.Image(image, x, y, r, sx, sy, ox, oy, kx, ky, color)`
+
+Returns an image.
+- `image` is the image to draw.
+- `x` is the x coordinate of the image.
+- `y` is the y coordinate of the image.
+- `r` is the rotation of the image. (default: `0`)
+- `sx` is the horizontal scale of the image. (default: `1`)
+- `sy` is the vertical scale of the image. (default: `sx`)
+- `ox` is the horizontal offset of the image (in pixels). (default: `0`)
+- `oy` is the vertical offset of the image (in pixels). (default: `0`)
+- `kx` is the horizontal shearing factor of the image. (default: `0`)
+- `ky` is the vertical shearing factor of the image. (default: `0`)
+- `color` is the color of the image. (default: `{255, 255, 255, 255}`)
+
+`image:draw()`
+
+Draws the image.
+
+### Text class
+
+Draws text.
+
+**Implements:** Box
+
+#### Properties
+- `font` is the font to use.
+- `text` is the text to print.
+- `x` is the x coordinate of the text.
+- `y` is the y coordinate of the text.
+- `r` is the rotation of the text.
+- `sx` is the horizontal scale of the text.
+- `sy` is the vertical scale of the text.
+- `ox` is the horizontal offset of the text (in pixels).
+- `oy` is the vertical offset of the text (in pixels).
+- `kx` is the horizontal shearing factor of the text.
+- `ky` is the vertical shearing factor of the text.
+- `color` is the color of the text. Should be a table with four numbers from 1-255 (r, g, b, a).
+
+#### Functions
+
+`text = drawboxes.Text(image, x, y, r, sx, sy, ox, oy, kx, ky, color)`
+
+Returns an image.
+- `font` is the font to use.
+- `text` is the text to print.
+- `x` is the x coordinate of the text.
+- `y` is the y coordinate of the text.
+- `r` is the rotation of the text. (default: `0`)
+- `sx` is the horizontal scale of the text. (default: `1`)
+- `sy` is the vertical scale of the text. (default: `sx`)
+- `ox` is the horizontal offset of the text (in pixels). (default: `0`)
+- `oy` is the vertical offset of the text (in pixels). (default: `0`)
+- `kx` is the horizontal shearing factor of the text. (default: `0`)
+- `ky` is the vertical shearing factor of the text. (default: `0`)
+- `color` is the color of the text. (default: `{255, 255, 255, 255}`)
+
+`text:draw()`
+
+Draws the text.
