@@ -232,7 +232,7 @@ Draws text.
 
 #### Functions
 
-`text = drawboxes.Text(image, x, y, r, sx, sy, ox, oy, kx, ky, color)`
+`text = drawboxes.Text(font, text, x, y, r, sx, sy, ox, oy, kx, ky, color)`
 
 Returns an image.
 - `font` is the font to use.
