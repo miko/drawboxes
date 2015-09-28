@@ -12,8 +12,8 @@ function love.load()
   local lg = love.graphics
 
   --load some fonts
-  font1 = lg.newFont('kenpixel.ttf', 30)
-  font2 = lg.newFont('kenvector_future.ttf', 60)
+  font1 = lg.newFont('font1.ttf', 30)
+  font2 = lg.newFont('font2.ttf', 60)
 
   --this container holds everything else and takes care of the screen size
   mainContainer = drawboxes.Container(0, 0, lg.getWidth(), lg.getHeight())
