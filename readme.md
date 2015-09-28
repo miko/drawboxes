@@ -39,6 +39,64 @@ function love.draw()
 end
 ```
 
+How to use this!
+----------------
+Drawboxes provides different objects that you can draw and position in different ways. Every object is a box (thanks, captain obvious!), and they have the following functions:
+- `getLeft`
+- `getCenterX`
+- `getRight`
+- `getTop`
+- `getCenterY`
+- `getBottom`
+- `getTopLeft`
+- `getCenter`
+- `getBottomRight`
+- `setLeft`
+- `setCenterX`
+- `setRight`
+- `setTop`
+- `setCenterY`
+- `setBottom`
+- `setTopLeft`
+- `setCenter`
+- `setBottomRight`
+
+For example, you can create a rectangle like this:
+
+```lua
+rectangle = drawboxes.Rectangle(100, 100, 200, 200)
+```
+
+And you can get the center of the rectangle like this:
+
+```lua
+x, y = rectangle:getCenter() --(200, 200)
+```
+
+You can also set the positions of objects using the set functions:
+
+```lua
+circle = drawboxes.Circle(500, 500, 20, 100)
+circle:setTopLeft(rectangle:getCenter())
+```
+
+You don't have to use the set functions; you can also set the x and y properties manually, which is useful for tweening:
+
+```lua
+circle.x = 100
+circle.y = 200
+```
+
+You can use containers to group objects together. The easiest way to group already existing objects is to create a container (with literally any dimensions) and use container:wrap to automatically add the objects.
+
+```lua
+container = drawboxes.Container(0, 0, 100, 100)
+container:wrap(circle, rectangle)
+container:setCenter(100, 100)
+```
+
+Aaaaand that's about it!
+
 API
 ---
 ### Base class
