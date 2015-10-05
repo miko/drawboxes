@@ -1,6 +1,6 @@
 Drawboxes
 =========
-Drawboxes is a library that represents drawing operations as boxes and gives you different ways to position those boxes relative to each other.
+Drawboxes is a library that represents drawing operations as boxes and gives you different ways to position those boxes relative to each other. It's useful for non-interactive and keyboard/gamepad operated UI elements, such as HUDs, text, and other simple UI elements.
 
 Examples
 --------
@@ -96,6 +96,38 @@ container:setCenter(100, 100)
 ```
 
 Aaaaand that's about it!
+
+Making custom objects
+---------------------
+### Functions to customize
+You can customize any Drawboxes object by defining these functions:
+
+`customBox:_getX(amount)`
+
+Returns the x coordinate of a horizontal location on the box. `amount` is a number from 0-1 representing the horizontal location to get, where 0 is the left edge and 1 is the right edge.
+
+`customBox:_getY(amount)`
+
+Returns the y coordinate of a vertical location on the box. `amount` is a number from 0-1 representing the vertical location to get, where 0 is the top edge and 1 is the bottom edge.
+
+`customBox:_setX(amount)`
+
+Moves the box so that the horizontal location defined by `amount` is at coordinate `x`.
+
+`customBox:_setY(amount)`
+
+Moves the box so that the vertical location defined by `amount` is at coordinate `y`.
+
+`customBox:draw(x, y)`
+
+Defines the box's drawing operation. `x` and `y` are the offset to draw everything with. Make sure you take these into account, as these are what make containers work!
+
+### Basic classes
+The two basic classes are the Base class and the Box class.
+
+The **Box** class is what you'll probably want to use. It is applicable for any custom object that has `x` and `y` properties. It also comes with 'w' and 'h' properties, but you don't have to use them. The default `getX` and `getY` functions assume that `x` and `y` are the top-left corner of the box, but you can change this behavior. As long as you are using `x` and `y`  properties, you should *not* need to change `_setX` and `setY`.
+
+The **Base** class is useful if you want to start completely from scratch. I can't imagine a case where you wouldn't need x and y properties, but the object is here if you want it. If you're using this class, you will have to define `_getX`, `_getY`, `_setX`, and `_setY`, as the Base class doesn't have these functions defined.
 
 API
 ---
