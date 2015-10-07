@@ -14,18 +14,35 @@ function love.load()
   text1 = drawboxes.Text(font1, 'Hello', 0, 0)
   text2 = drawboxes.Text(font2, 'World!', 0, 0)
 
-  --position text2 relative to text1
-  text2:setLeft(text1:getRight())
-  text2:setCenterY(text1:getCenterY())
+  --text2:setLeft(text1:getRight())
+  --text2:setCenterY(text1:getCenterY())
 
   --center the text on the screen
   textContainer = drawboxes.Container(0, 0, lg.getWidth(), lg.getHeight())
   textContainer:wrap(text1, text2)
-  textContainer:setCenter(mainContainer:getCenter())
 
   mainContainer:add(textContainer)
+
+  -- Create layout update function
+  function mainContainer:update(w, h)
+    mainContainer:resize(w, h)
+    --position text2 relative to text1
+    text2:setLeft(text1:getRight())
+    text2:setCenterY(text1:getCenterY())
+    -- recalculate wrapping dimensions after children have been updated
+    textContainer:relayout()
+    textContainer:setCenter(mainContainer:getCenter())
+  end
+  -- update layout with current screen dimensions
+  mainContainer:update(lg.getWidth(), lg.getHeight())
 end
 
 function love.draw()
   mainContainer:draw()
 end
+
+function love.resize(w, h)
+  -- recalculate layout - run layout function
+  mainContainer:update(w, h)
+end
+

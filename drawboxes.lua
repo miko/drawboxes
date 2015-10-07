@@ -80,6 +80,11 @@ function Box:new(x, y, w, h)
   self.h = h
 end
 
+function Box:resize(w, h)
+  self.w = w
+  self.h = h
+end
+
 --internally used get functions, you might want to customize these
 function Box:_getX(amount) return self.x + self.w * amount end
 function Box:_getY(amount) return self.y + self.h * amount end
@@ -115,8 +120,15 @@ function Container:remove(child)
 end
 
 function Container:wrap(...)
-  --get the box around all the objects
   local children = {...}
+  for i = 1, #children do
+    self:add(children[i])
+  end
+end
+
+function Container:relayout()
+  local children = self.children
+  --get the box around all the objects
   local x1, y1 = children[1]:getTopLeft()
   local x2, y2 = children[1]:getBottomRight()
   for i = 2, #children do
@@ -129,12 +141,11 @@ function Container:wrap(...)
 
   self.x, self.y, self.w, self.h = x1, y1, x2 - x1, y2 - y1
 
-  --add the objects
+  --relayout children
   for i = 1, #children do
     local child = children[i]
     child:setLeft(child:getLeft() - self:getLeft())
     child:setTop(child:getTop() - self:getTop())
-    self:add(child)
   end
 end
 
@@ -198,6 +209,12 @@ function Circle:draw(x, y)
   love.graphics.setColor(self.color)
   love.graphics.circle(self.mode, self.x + x, self.y + y, self.r, self.segments)
 end
+
+function Circle:resize(r, segments)
+  self.r        = r
+  self.segments = segments or 100
+end
+
 
 local Image = {}
 Image.__index = Image
